@@ -10,7 +10,7 @@ class GildedRose {
     public GildedRose(List<Item> items) {
         this.items = items;
     }
-
+    
      public void updateQuality() {
         for (Item item : items) {
             if (isSulfuras(item)) {
@@ -30,23 +30,28 @@ class GildedRose {
          private void updateItemQuality(Item item) {
         if (isAgedBrie(item)) {
             updateAgedBrie(item);
-        } else if (isBackstagePass(item)) {
+             return;
+        } 
+        if (isBackstagePass(item)) {
             updateBackstagePass(item);
-        } else {
-            updateNormalItem(item);
+             return;
         }
+            updateNormalItem(item);
     }
 
        private void handleItemExpiration(Item item) {
         if (item.sellIn < 0) {
-            if (isAgedBrie(item)) {
-                item.quality += 1;
-            } else if (isBackstagePass(item)) {
-                item.quality = 0;
-            } else {
-                handleExpiredNormalItem(item);
-            }
+             return;
         }
+        if (isAgedBrie(item)) {
+                item.quality += 1;
+             return;
+        }
+        if (isBackstagePass(item)) {
+                item.quality = 0;
+             return;
+        }
+         handleExpiredNormalItem(item);
     }
 
       private void updateAgedBrie(Item item) {
@@ -56,8 +61,9 @@ class GildedRose {
       }
        private void updateBackstagePass(Item item) {
         if (item.quality < 50) {
-            item.quality += 1;
+             return;
         }
+            item.quality += 1;
         if (item.sellIn < 10 && item.quality < 50) {
             item.quality += 1;
         }
