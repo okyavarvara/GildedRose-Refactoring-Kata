@@ -18,24 +18,35 @@ class GildedRose {
             }
 
             updateSellIn(item);
-
-        if (isAgedBrie(item)) {
-                updateAgedBrie(item);
-                    continue;
-            } 
-        if (isBackstagePass(item)) {
-                updateBackstagePass(item);
-                    continue;
-            } 
-                updateNormalItem(item);
-
-            if (item.sellIn < 0) {
-                handleExpiredItem(item);
-            }
+            updateItemQuality(item);
+            handleItemExpiration(item);
         }
-    }
+     }
+
         private void updateSellIn(Item item) {
         item.sellIn -= 1;
+    }
+
+         private void updateItemQuality(Item item) {
+        if (isAgedBrie(item)) {
+            updateAgedBrie(item);
+        } else if (isBackstagePass(item)) {
+            updateBackstagePass(item);
+        } else {
+            updateNormalItem(item);
+        }
+    }
+
+       private void handleItemExpiration(Item item) {
+        if (item.sellIn < 0) {
+            if (isAgedBrie(item)) {
+                item.quality += 1;
+            } else if (isBackstagePass(item)) {
+                item.quality = 0;
+            } else {
+                handleExpiredNormalItem(item);
+            }
+        }
     }
 
       private void updateAgedBrie(Item item) {
@@ -60,15 +71,12 @@ class GildedRose {
         item.quality -= 1; 
     }
 }
-    private void handleExpiredItem(Item item) {
-    if (isAgedBrie(item)) {
-        item.quality += 1;
-    } else if (isBackstagePass(item)) {
-            item.quality = 0;
-        } else {
-            handleExpiredNormalItem(item);
+    private void handleExpiredNormalItem(Item item) {
+    if (item.quality > 0) {
+            item.quality -= 1;
         }
-}
+    }
+    
     private boolean isAgedBrie(Item item) {
         return item.name.equals(AGED_BRIE);
     }
@@ -77,20 +85,6 @@ class GildedRose {
         return item.name.equals(BACKSTAGE_PASSES);
     }
     
-    
-    private void handleExpiredSpecialItem(Item item) {
-    if (item.name.equals(AGED_BRIE)) {
-        item.quality += 1;
-    } else if (item.name.equals(BACKSTAGE_PASSES)) {
-        item.quality = 0;
-    }
-}
-    
-    private void handleExpiredNormalItem(Item item) {
-        if (item.quality > 0) {
-        item.quality -= 1;
-    }
-}
     private boolean isSulfuras(Item item) {
         return item.name.equals(SULFURAS);
     }
