@@ -21,11 +21,13 @@ class GildedRose {
 
         if (item.name.equals(AGED_BRIE)) {
                 updateAgedBrie(item);
-            } else if (item.name.equals(BACKSTAGE_PASSES)) {
+                    continue;
+            } 
+        if (item.name.equals(BACKSTAGE_PASSES)) {
                 updateBackstagePass(item);
-            } else {
+                    continue;
+            } 
                 updateNormalItem(item);
-            }
 
             if (item.sellIn < 0) {
                 handleExpiredItem(item);
